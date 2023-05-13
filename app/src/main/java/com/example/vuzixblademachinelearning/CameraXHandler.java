@@ -27,19 +27,23 @@ public class CameraXHandler {
         cameraProviderFuture = ProcessCameraProvider.getInstance(context);
     }
 
+    // Unused function for only preview
     public void startPreview() {
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
+                // Creates a preview object and binds it to the same surface provider as previewView
                 Preview preview = new Preview.Builder()
-                        .build();
-
-                CameraSelector cameraSelector = new CameraSelector.Builder()
                         .build();
 
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
+                // Chooses a camera
+                CameraSelector cameraSelector = new CameraSelector.Builder()
+                        .build();
+
+                // Binds the function to the camera and view
                 Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)context, cameraSelector, preview);
 
             } catch ( Exception e) {
@@ -49,6 +53,7 @@ public class CameraXHandler {
         }, ContextCompat.getMainExecutor(context));
     }
 
+    // Function for only image analysis
     public void startAnalysis(ImageAnalysis imageAnalyzer) {
         cameraProviderFuture.addListener(() -> {
             try {
@@ -58,8 +63,6 @@ public class CameraXHandler {
                         .build();
 
                 Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)context, cameraSelector, imageAnalyzer);
-                CameraControl cameraControl = camera.getCameraControl();
-                cameraControl.setZoomRatio(3.5f);
 
             } catch ( Exception e) {
                 // No errors need to be handled for this Future.
@@ -68,6 +71,7 @@ public class CameraXHandler {
         }, ContextCompat.getMainExecutor(context));
     }
 
+    //Function for both preview and image analysis
     public void startPreview(ImageAnalysis imageAnalyzer) {
         cameraProviderFuture.addListener(() -> {
             try {

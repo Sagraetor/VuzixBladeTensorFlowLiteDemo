@@ -26,6 +26,7 @@ class TFLiteHandler(var context: Context,
     var imageAnalyzer: ImageAnalysis
 
     init {
+        //Builds the object detector
         val ODOptions = ObjectDetectorOptions.builder()
             .setScoreThreshold(.6f)
             .setMaxResults(3)
@@ -37,6 +38,7 @@ class TFLiteHandler(var context: Context,
             Log.d(ContentValues.TAG, "ObjectDetector failed to initialize: " + e.message)
         }
 
+        //Builds the image analyzer
         imageAnalyzer = ImageAnalysis.Builder()
                 .setTargetAspectRatio(AspectRatio.RATIO_4_3)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -59,23 +61,19 @@ class TFLiteHandler(var context: Context,
 
 
     private fun detectObjects(image: ImageProxy) {
-        // Copy out RGB bits to the shared bitmap buffer
+        // Copy out RGB bits from the image analyzer to the shared bitmap buffer
         image.use { bitmapBuffer.copyPixelsFromBuffer(image.planes[0].buffer) }
         val imageRotation = image.imageInfo.rotationDegrees
         detect(bitmapBuffer, imageRotation)
-
     }
 
 
     private fun detect(image: Bitmap, imageRotation: Int) {
-
-        // Inference time is the difference between the system time at the start and finish of the
-        // process
+        // Inference time is the difference between the system time at the start and finish of the process
         var inferenceTime = SystemClock.uptimeMillis()
 
         // Create preprocessor for the image.
-        // See https://www.tensorflow.org/lite/inference_with_metadata/
-        //            lite_support#imageprocessor_architecture
+        // See https://www.tensorflow.org/lite/inference_with_metadata/lite_support#imageprocessor_architecture
         val imageProcessor = ImageProcessor.Builder().add(Rot90Op(-imageRotation / 90)).build()
 
         // Preprocess the image and convert it into a TensorImage for detection.
@@ -83,6 +81,8 @@ class TFLiteHandler(var context: Context,
 
         val results = objectDetector.detect(tensorImage)
         inferenceTime = SystemClock.uptimeMillis() - inferenceTime
+
+        // Sends results to a listener (TFLResultsView object)
         listener?.onResults(
                 results,
                 inferenceTime,

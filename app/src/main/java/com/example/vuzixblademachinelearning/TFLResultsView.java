@@ -25,6 +25,7 @@ public class TFLResultsView extends View implements TFLiteListener{
     public TFLResultsView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
 
+        // Initialize paint object
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.STROKE);
@@ -32,8 +33,11 @@ public class TFLResultsView extends View implements TFLiteListener{
         paint.setTextSize(50);
     }
 
+
+    //Fires everytime the view is redrawn
     @Override
     protected void onDraw(Canvas canvas){
+        // Runs if the view is overlaying a preview
         if (isOverlayingPreview)
             for (Detection result:results) {
                 RectF rect = result.getBoundingBox();
@@ -46,6 +50,8 @@ public class TFLResultsView extends View implements TFLiteListener{
                 canvas.drawRect(rect, paint);
 
             }
+
+        // Runs if it is a standalone
         else {
             for (Detection result:results) {
                 int currIndex = results.indexOf(result);
@@ -54,10 +60,12 @@ public class TFLResultsView extends View implements TFLiteListener{
                 rect.left -= 90;
                 rect.right -= 90;
 
-                //rect = Scale(rect, 3.5f);
+                rect = Scale(rect, 3.5f);
+
+                // Write the objects detected on the top left corner
                 canvas.drawText(result.getCategories().get(0).getLabel(), 5, 40 * (currIndex + 1), paint);
 
-                //below is method to get general location of object if out of bounds and points to it
+                // Below is method to get general location of object if out of bounds and points to it
                 float arrowHeight;
 
                 if (rect.centerY() < 30)
@@ -85,6 +93,7 @@ public class TFLResultsView extends View implements TFLiteListener{
 
     @Override
     public void onResults(@Nullable List<Detection> results, long inferenceTime, int imageHeight, int imageWidth) {
+        // Fires when object detecter produces a result and forces the view to redraw
         this.results = results;
         postInvalidate();
     }
