@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item1"
+        android:title="Info"
+        android:onClick="showHello" />
+
+    <item
+        android:id="@+id/item2"
+        android:title="CamXView"
+        android:onClick="showCameraX" />
+
+    <item
+        android:id="@+id/item3"
+        android:title="TrueView"
+        android:onClick="showTrue" />
+
+</menu>
