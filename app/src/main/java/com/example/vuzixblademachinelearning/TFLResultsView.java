@@ -57,8 +57,8 @@ public class TFLResultsView extends View implements TFLiteListener{
                 int currIndex = results.indexOf(result);
                 paint.setColor(colorList[currIndex]);
                 RectF rect = result.getBoundingBox();
-                rect.left -= 90;
-                rect.right -= 90;
+                rect.left -= 80;
+                rect.right -= 80;
 
                 rect = Scale(rect, 3.5f);
 
