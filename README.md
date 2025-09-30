@@ -1,4 +1,4 @@
-# Vuzix Blade TensorFlow Lite Demo
+# Vuzix Blade TensorFlow Lite Demo ![Kotlin](https://img.shields.io/badge/Kotlin-FF69B4?logo=kotlin\&logoColor=white) ![Android](https://img.shields.io/badge/Android-3DDC84?logo=android\&logoColor=white) ![TensorFlow Lite](https://img.shields.io/badge/TensorFlow%20Lite-FF6F00?logo=tensorflow\&logoColor=white)
 
 ## Overview
 
